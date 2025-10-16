@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/hameedbf/Documents/Python/emi_prediction/mlruns/791890120930583074/caf083bf79ee4da78e1aa839bb827632/artifacts
+deleted_time: 1760609828343
+end_time: 1760609229309
+entry_point_name: ''
+experiment_id: '791890120930583074'
+lifecycle_stage: deleted
+run_id: caf083bf79ee4da78e1aa839bb827632
+run_name: capricious-gnu-727
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760609223760
+status: 3
+tags: []
+user_id: hameedbf

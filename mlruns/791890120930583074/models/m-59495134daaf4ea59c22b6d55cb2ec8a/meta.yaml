@@ -1,0 +1,10 @@
+artifact_location: file:///c:/Users/hameedbf/Documents/Python/emi_prediction/mlruns/791890120930583074/models/m-59495134daaf4ea59c22b6d55cb2ec8a/artifacts
+creation_timestamp: 1760609224282
+experiment_id: '791890120930583074'
+last_updated_timestamp: 1760609229295
+model_id: m-59495134daaf4ea59c22b6d55cb2ec8a
+model_type: null
+name: linear_regression_model
+source_run_id: caf083bf79ee4da78e1aa839bb827632
+status: 2
+status_message: null

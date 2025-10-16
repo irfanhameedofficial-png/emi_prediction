@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/hameedbf/Documents/Python/emi_prediction/mlruns/791890120930583074/8a00f7018780402b9dc28f1206a7d6b6/artifacts
+end_time: 1760609886923
+entry_point_name: ''
+experiment_id: '791890120930583074'
+lifecycle_stage: active
+run_id: 8a00f7018780402b9dc28f1206a7d6b6
+run_name: Linear Regression with HyperParameter Tuning
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760609880165
+status: 3
+tags: []
+user_id: hameedbf

@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/hameedbf/Documents/Python/emi_prediction/mlruns/791890120930583074/69b53cf39d814534afdac013524f715d/artifacts
+deleted_time: 1760609828346
+end_time: 1760608828138
+entry_point_name: ''
+experiment_id: '791890120930583074'
+lifecycle_stage: deleted
+run_id: 69b53cf39d814534afdac013524f715d
+run_name: aged-bug-116
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760608822371
+status: 3
+tags: []
+user_id: hameedbf
