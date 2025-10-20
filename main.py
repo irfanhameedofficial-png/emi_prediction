@@ -3,81 +3,90 @@ import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder
 
-# --- Load dataset for column reference ---
+# --- Load dataset for metadata only (to populate form) ---
 df = pd.read_csv("cleaned_emi_dataset.csv")
 
-# --- Load trained models ---
-xgb_cls = joblib.load(r"C:\emi_prediction\Classification.pkl")  # Classification model
-rf_reg = joblib.load(r"C:\emi_prediction\Regression.pkl")       # Regression model
+# --- Streamlit App ---
+st.set_page_config(page_title="EMI Prediction App", layout="wide")
 
-# --- Label Encoding (as used during training) ---
-label_encoders = {}
-for col in df.select_dtypes(include='object').columns:
-    le = LabelEncoder()
-    df[col] = le.fit_transform(df[col].astype(str))
-    label_encoders[col] = le
+# Sidebar Navigation
+page = st.sidebar.selectbox("Navigate", ["🏠 Home", "🧾 Predict EMI & Eligibility"])
 
-# --- Streamlit Config ---
-st.set_page_config(page_title="EMI Prediction App", layout="centered")
-st.title("💰 EMI Prediction & Eligibility Checker")
+# --- HOME PAGE ---
+if page == "🏠 Home":
+    st.title("💰 EMI Prediction and Eligibility App")
+    st.markdown("""
+    This app predicts:
+    - **Maximum EMI Amount** you can afford (Regression Model)
+    - **EMI Eligibility Status** (Classification Model)
 
-st.markdown("""
-Welcome to the **EMI Prediction App** 👋  
-This tool predicts:
-- 💸 Your **maximum affordable EMI**
-- ✅ Your **loan eligibility status**
+    The prediction is based on various financial and demographic factors such as salary, house type, loans, and expenses.
 
-Fill in your details below and click **Predict**.
-""")
+    **How it works:**
+    1. Go to the *Predict EMI & Eligibility* page.
+    2. Fill in your details.
+    3. Click **Predict** to see both your **Eligible EMI Amount** and **Eligibility Status**.
+    """)
 
-# --- Collect readable user inputs ---
-st.header("📋 Enter Your Details")
+# --- PREDICTION PAGE ---
+elif page == "🧾 Predict EMI & Eligibility":
+    st.title("📊 Predict Your EMI and Eligibility")
+    st.markdown("Please fill in all the details below:")
 
-col1, col2 = st.columns(2)
+    # Collect user inputs
+    input_data = {}
+    for col in df.drop(['emi_eligibility', 'max_monthly_emi'], axis=1).columns:
+        if df[col].dtype == 'object':
+            input_data[col] = st.selectbox(f"{col}", df[col].unique(), key=col)
+        else:
+            input_data[col] = st.number_input(f"{col}", value=0.0, key=col)
 
-input_data = {}
+    # --- When Predict button is clicked ---
+    if st.button("🔮 Predict EMI & Eligibility"):
+        # --- Convert user input to DataFrame ---
+        input_df = pd.DataFrame([input_data])
 
-# Example readable mapping — adjust based on your dataset columns
-with col1:
-    input_data["age"] = st.slider("Age", 18, 70, 30)
-    input_data["monthly_income"] = st.number_input("Monthly Income (₹)", min_value=1000.0, max_value=1000000.0, value=50000.0)
-    input_data["existing_loans"] = st.number_input("Number of Existing Loans", min_value=0, max_value=10, value=1)
-    input_data["credit_score"] = st.slider("Credit Score", 300, 900, 750)
-    input_data["dependents"] = st.selectbox("Number of Dependents", options=[0, 1, 2, 3, "3+"])
-    
-with col2:
-    input_data["employment_type"] = st.selectbox("Employment Type", ["Salaried", "Self-Employed", "Unemployed", "Student"])
-    input_data["house_type"] = st.selectbox("House Type", ["Owned", "Rented", "Mortgaged", "Living with Family"])
-    input_data["location"] = st.selectbox("Location Type", ["Urban", "Semi-Urban", "Rural"])
-    input_data["monthly_expenses"] = st.number_input("Monthly Expenses (₹)", min_value=0.0, max_value=1000000.0, value=20000.0)
-    input_data["loan_tenure"] = st.slider("Desired Loan Tenure (Months)", 6, 120, 36)
+        # --- Encode categorical columns ---
+        label_encoders = {}
+        for col in df.select_dtypes(include='object').columns:
+            le = LabelEncoder()
+            le.fit(df[col].astype(str))  # fit on training data only
+            label_encoders[col] = le
+            if col in input_df.columns:
+                val = input_df.at[0, col]
+                try:
+                    input_df.at[0, col] = le.transform([val])[0]
+                except ValueError:
+                    # If unseen value, use mode
+                    input_df.at[0, col] = le.transform([df[col].mode()[0]])[0]
 
-# --- Convert to DataFrame ---
-input_df = pd.DataFrame([input_data])
+        # --- Reorder columns to match training ---
+        all_features = [
+            'age', 'gender', 'marital_status', 'education', 'monthly_salary',
+            'employment_type', 'years_of_employment', 'company_type', 'house_type',
+            'monthly_rent', 'family_size', 'dependents', 'school_fees', 'college_fees',
+            'travel_expenses', 'groceries_utilities', 'other_monthly_expenses',
+            'existing_loans', 'current_emi_amount', 'credit_score', 'bank_balance',
+            'emergency_fund', 'emi_scenario', 'requested_amount', 'requested_tenure'
+        ]
+        input_df = input_df[all_features]
 
-# --- Encode categorical columns like training ---
-for col in input_df.columns:
-    if col in label_encoders:
-        input_df[col] = label_encoders[col].transform(input_df[col].astype(str))
+        # --- Load models only here ---
+        rf_reg = joblib.load(r'C:\emi_prediction\Regression.pkl')       # Regression
+        xgb_cls = joblib.load(r'C:\emi_prediction\Classification.pkl') # Classification
 
-# --- Align columns ---
-expected_features = df.drop(["emi_eligibility", "max_monthly_emi"], axis=1).columns
-input_df = input_df.reindex(columns=expected_features, fill_value=0)
+        # --- Predict ---
+        predicted_emi = rf_reg.predict(input_df)[0]
+        predicted_eligibility = xgb_cls.predict(input_df)[0]
 
-# --- Predict Button ---
-if st.button("🔮 Predict EMI & Eligibility"):
-    # Predict EMI (Regression)
-    predicted_emi = rf_reg.predict(input_df)[0]
+        # Decode eligibility
+        if 'emi_eligibility' in label_encoders:
+            predicted_eligibility = label_encoders['emi_eligibility'].inverse_transform(
+                [int(predicted_eligibility)]
+            )[0]
 
-    # Predict Eligibility (Classification)
-    predicted_eligibility = xgb_cls.predict(input_df)[0]
-
-    # Decode eligibility label
-    if "emi_eligibility" in label_encoders:
-        predicted_eligibility = label_encoders["emi_eligibility"].inverse_transform([int(predicted_eligibility)])[0]
-
-    # --- Display Results ---
-    st.success("✅ Prediction Completed Successfully!")
-    st.subheader("📊 Prediction Results")
-    st.metric("Predicted Max EMI Amount (₹)", f"{predicted_emi:,.2f}")
-    st.metric("EMI Eligibility Status", predicted_eligibility)
+        # Show results
+        st.subheader("🧠 Prediction Results")
+        st.metric("Predicted Max EMI Amount (₹)", f"{predicted_emi:,.2f}")
+        st.metric("EMI Eligibility Status", predicted_eligibility)
+        st.success("✅ Prediction Completed Successfully!")
