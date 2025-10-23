@@ -14,16 +14,16 @@ from sklearn.preprocessing import LabelEncoder
 # REG_MODEL_ID = "1DxtLMzApBMp40bIybvI7W0e-6eHCHcdD"
 # CLS_MODEL_ID = "1acxjnD5MC6vzt_xSsDlvSwrPjwhKaK_p"
 # 2nd Compression Model using lzma
-# REG_MODEL_ID = "1qBR60SfO4NlFQkN9YDb6RFI7_zEjd33z"
+REG_MODEL_ID = "1qBR60SfO4NlFQkN9YDb6RFI7_zEjd33z"
 CLS_MODEL_ID = "10IsgfjZWN641uO4DLBWMsJN3Za4oBqPk"
 #Lightweight Model for Reg
-REG_MODEL_ID = "1Vx4kuP2t657XjeRkXMxWcQWwxo9h_WeN"
+# REG_MODEL_ID = "1Vx4kuP2t657XjeRkXMxWcQWwxo9h_WeN"
 
 CSV_FILE_ID = "1Gvw7MMF0jLSseRC4EP9rkPAUbEiP6v3K"  
 
 # LOCAL FILE PATHS
-# REG_MODEL_PATH = "Final_Regression_compressed.pkl"
-REG_MODEL_PATH = "Regression2.pkl"
+REG_MODEL_PATH = "Final_Regression_compressed.pkl"
+# REG_MODEL_PATH = "Regression2.pkl"
 CLS_MODEL_PATH = "Final_Classification_compressed.pkl"
 CSV_PATH = "cleaned_emi_dataset.csv"
 
