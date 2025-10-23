@@ -7,12 +7,12 @@ import gdown
 from sklearn.preprocessing import LabelEncoder
 
 # GOOGLE DRIVE FILE IDs
-REG_MODEL_ID = "1Vx4kuP2t657XjeRkXMxWcQWwxo9h_WeN"
+REG_MODEL_ID = "1Uc3cEFXdM-F0M3YNmE6wwokxdnbbdxdq"
 CLS_MODEL_ID = "1EnMQLiWiGbbOc7xfNKEX2qlP2ldGrQ7L"
 CSV_FILE_ID = "1Gvw7MMF0jLSseRC4EP9rkPAUbEiP6v3K"  
 
 # LOCAL FILE PATHS
-REG_MODEL_PATH = "Regression2.pkl"
+REG_MODEL_PATH = "Final_Regression.pkl"
 CLS_MODEL_PATH = "Final_Classification.pkl"
 CSV_PATH = "cleaned_emi_dataset.csv"
 
