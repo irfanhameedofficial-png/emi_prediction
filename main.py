@@ -7,10 +7,16 @@ import gdown
 from sklearn.preprocessing import LabelEncoder
 
 # GOOGLE DRIVE FILE IDs
+#4GB Model
 # REG_MODEL_ID = "1Uc3cEFXdM-F0M3YNmE6wwokxdnbbdxdq"
 # CLS_MODEL_ID = "1EnMQLiWiGbbOc7xfNKEX2qlP2ldGrQ7L"
-REG_MODEL_ID = "1DxtLMzApBMp40bIybvI7W0e-6eHCHcdD"
-CLS_MODEL_ID = "1acxjnD5MC6vzt_xSsDlvSwrPjwhKaK_p"
+#1st Compression Model 
+# REG_MODEL_ID = "1DxtLMzApBMp40bIybvI7W0e-6eHCHcdD"
+# CLS_MODEL_ID = "1acxjnD5MC6vzt_xSsDlvSwrPjwhKaK_p"
+# 2nd Compression Model using lzma
+REG_MODEL_ID = "1qBR60SfO4NlFQkN9YDb6RFI7_zEjd33z"
+CLS_MODEL_ID = "10IsgfjZWN641uO4DLBWMsJN3Za4oBqPk"
+
 CSV_FILE_ID = "1Gvw7MMF0jLSseRC4EP9rkPAUbEiP6v3K"  
 
 # LOCAL FILE PATHS
