@@ -7,13 +7,15 @@ import gdown
 from sklearn.preprocessing import LabelEncoder
 
 # GOOGLE DRIVE FILE IDs
-REG_MODEL_ID = "1Uc3cEFXdM-F0M3YNmE6wwokxdnbbdxdq"
-CLS_MODEL_ID = "1EnMQLiWiGbbOc7xfNKEX2qlP2ldGrQ7L"
+# REG_MODEL_ID = "1Uc3cEFXdM-F0M3YNmE6wwokxdnbbdxdq"
+# CLS_MODEL_ID = "1EnMQLiWiGbbOc7xfNKEX2qlP2ldGrQ7L"
+REG_MODEL_ID = "1DxtLMzApBMp40bIybvI7W0e-6eHCHcdD"
+CLS_MODEL_ID = "1acxjnD5MC6vzt_xSsDlvSwrPjwhKaK_p"
 CSV_FILE_ID = "1Gvw7MMF0jLSseRC4EP9rkPAUbEiP6v3K"  
 
 # LOCAL FILE PATHS
-REG_MODEL_PATH = "Final_Regression.pkl"
-CLS_MODEL_PATH = "Final_Classification.pkl"
+REG_MODEL_PATH = "Final_Regression_compressed.pkl"
+CLS_MODEL_PATH = "Final_Classification_compressed.pkl"
 CSV_PATH = "cleaned_emi_dataset.csv"
 
 # DOWNLOAD FUNCTION
@@ -41,21 +43,28 @@ median_values = df.median(numeric_only=True)
 st.title("🏦 EMI Prediction App")
 st.markdown("Enter your details below to check **EMI eligibility** and **predicted EMI amount**.")
 
-# USER INPUT FORM (Now 11 inputs)
+# USER INPUT FORM
 with st.form("emi_form"):
     st.header("🔸 Enter Applicant Details")
 
-    monthly_salary = st.number_input("Monthly Salary", min_value=0.0)
-    house_type = st.selectbox("House Type", ["Rented", "Own", "Family"])
-    school_fees = st.number_input("School Fees", min_value=0.0)
-    college_fees = st.number_input("College Fees", min_value=0.0)
-    groceries_utilities = st.number_input("Groceries & Utilities", min_value=0.0)
-    existing_loans = st.selectbox("Existing Loans", ["Yes", "No"])
-    current_emi_amount = st.number_input("Current EMI Amount", min_value=0.0)
-    credit_score = st.number_input("Credit Score", min_value=0.0)
-    bank_balance = st.number_input("Bank Balance", min_value=0.0)
-    requested_amount = st.number_input("Requested Loan Amount", min_value=0.0)
-    requested_tenure = st.number_input("Requested Tenure (months)", min_value=1, step=1)
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        monthly_salary = st.number_input("Monthly Salary", min_value=0.0)
+        house_type = st.selectbox("House Type", ["Rented", "Own", "Family"])
+        school_fees = st.number_input("School Fees", min_value=0.0)
+        college_fees = st.number_input("College Fees", min_value=0.0)
+        
+    with col2:
+        groceries_utilities = st.number_input("Groceries & Utilities", min_value=0.0)
+        existing_loans = st.selectbox("Existing Loans", ["Yes", "No"])
+        current_emi_amount = st.number_input("Current EMI Amount", min_value=0.0)
+        credit_score = st.number_input("Credit Score", min_value=0.0)
+
+    with col3:
+        requested_amount = st.number_input("Requested Loan Amount", min_value=0.0)        
+        bank_balance = st.number_input("Bank Balance", min_value=0.0)
+        requested_tenure = st.number_input("Requested Tenure (months)", min_value=1, step=1)
 
     submitted = st.form_submit_button("🔍 Predict")
 
